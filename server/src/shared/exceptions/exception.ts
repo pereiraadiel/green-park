@@ -15,6 +15,11 @@ export const ExceptionStatus = {
     code: 404,
     name: 'NotFound',
   },
+  MimetypeNotAllowed: {
+    message: 'File mimetype is not allowed',
+    code: 415,
+    name: 'MimetypeNotAllowed',
+  },
   ServiceError: {
     message: 'The service is unavailable',
     code: 503,

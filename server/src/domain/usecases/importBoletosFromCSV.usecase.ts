@@ -1,8 +1,14 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { CSVtoJSON } from '../../shared/utils/csvToJson.util';
-import { BoletoRepository } from '../repositories/boleto.repository';
-import { LoteRepository } from '../repositories/lote.repository';
+import {
+  BOLETO_REPOSITORY,
+  BoletoRepository,
+} from '../repositories/boleto.repository';
+import {
+  LOTE_REPOSITORY,
+  LoteRepository,
+} from '../repositories/lote.repository';
 import { UseCase } from './usecase';
 import { unidadeToIdLoteMapper } from '../mappers/lote.mapper';
 import { inputBoletoJsonToCreateOneBoletoDTOMapper } from '../mappers/boleto.mapper';
@@ -13,7 +19,9 @@ export class ImportBoletosFromCSVUseCase extends UseCase {
   SERVICE_NAME = 'IMPORT_BOLETOS_FROM_CSV_USECASE';
 
   constructor(
+    @Inject(BOLETO_REPOSITORY)
     private readonly boletoRepository: BoletoRepository,
+    @Inject(LOTE_REPOSITORY)
     private readonly loteRepository: LoteRepository,
   ) {
     super();
