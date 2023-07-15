@@ -2,10 +2,9 @@ import { Exception } from '../../shared/exceptions/exception';
 import { ServiceErrorException } from '../../shared/exceptions/serviceError.exception';
 
 export abstract class UseCase {
-  abstract SERVICE_NAME: string;
+  protected abstract SERVICE_NAME: string;
 
-  catchException(exception: any, context: string | string[]) {
-    console.error(exception);
+  protected catchException(exception: any, context: string | string[]) {
     if (exception instanceof Exception) {
       throw Exception;
     }

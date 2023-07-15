@@ -22,7 +22,10 @@ export class GetManyBoletosUseCase extends UseCase {
   async generateReport(boletos: BoletoEntity[]) {
     const generateReportService = new GenerateReportService();
     const orderedBoletos = boletos.sort((a, b) => a.lote.id - b.lote.id);
-    return generateReportService.handle(orderedBoletos);
+
+    return {
+      base64: await generateReportService.handle(orderedBoletos),
+    };
   }
 
   async handle(dto: GetManyBoletosDTO) {

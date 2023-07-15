@@ -33,16 +33,16 @@ export class ImportBoletosFromCSVUseCase extends UseCase {
     try {
       const csvPath = path.resolve(__dirname, '..', '..', 'uploads', 'csv.csv');
       const csv = fs.readFileSync(csvPath).toString('utf8');
-      console.warn(csv, 'csv');
+
       const boletosJson: InputBoletoJSON[] = await CSVtoJSON(csv);
       const lotes = await this.loteRepository.findMany();
 
-      const boletosDTO = boletosJson.map((boleto) => {
-        return inputBoletoJsonToCreateOneBoletoDTOMapper(
+      const boletosDTO = boletosJson.map((boleto) =>
+        inputBoletoJsonToCreateOneBoletoDTOMapper(
           boleto,
           unidadeToIdLoteMapper(boleto.unidade, lotes),
-        );
-      });
+        ),
+      );
 
       await this.boletoRepository.createMany(boletosDTO);
     } catch (error) {
