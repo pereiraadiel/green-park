@@ -3,5 +3,5 @@ export class GetManyBoletosParamRequest {
   nome?: string;
   valor_inicial?: string;
   valor_final?: string;
-  relatorio?: 1;
+  relatorio?: '1';
 }

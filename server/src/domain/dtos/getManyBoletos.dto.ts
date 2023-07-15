@@ -3,5 +3,5 @@ export class GetManyBoletosDTO {
   valor_inicial?: number;
   valor_final?: number;
   id_lote?: number;
-  relatorio?: 1;
+  relatorio?: '1';
 }
