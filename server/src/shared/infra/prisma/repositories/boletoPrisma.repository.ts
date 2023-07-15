@@ -14,31 +14,48 @@ export class BoletoPrismaRepository implements BoletoRepository {
   }
 
   async createMany(dto: CreateOneBoletoDTO[]): Promise<BoletoEntity[]> {
+    console.warn('dto >> ', dto);
+    const linhasDigitaveis = dto.map((item) => item.linhaDigitavel);
+    console.warn(linhasDigitaveis, 'linhas digitaveis');
+
+    const existingBoletos = await this.prisma.boleto.findMany({
+      where: {
+        linhaDigitavel: {
+          in: linhasDigitaveis,
+        },
+      },
+    });
+    console.warn(existingBoletos, 'existing boletos');
+
     const boletos = await Promise.all(
       dto.map(async (item) => {
-        const alreadyExists = await this.prisma.boleto.findUnique({
-          where: {
-            linhaDigitavel: item.linhaDigitavel,
-          },
-        });
-        if (alreadyExists) return alreadyExists;
+        try {
+          console.warn('item: >> ', item);
+          const alreadyExists = existingBoletos.find(
+            (boleto) => boleto.linhaDigitavel === item.linhaDigitavel,
+          );
 
-        return await this.prisma.boleto.create({
-          data: {
-            ativo: item.ativo,
-            linhaDigitavel: item.linhaDigitavel,
-            nomeSacado: item.nomeSacado,
-            valor: item.valor,
-            lote: {
-              connect: {
-                id: item.idLote,
+          if (alreadyExists) return alreadyExists;
+
+          return await this.prisma.boleto.create({
+            data: {
+              ativo: item.ativo,
+              linhaDigitavel: item.linhaDigitavel,
+              nomeSacado: item.nomeSacado,
+              valor: item.valor,
+              lote: {
+                connect: {
+                  id: item.idLote,
+                },
               },
             },
-          },
-          include: {
-            lote: true,
-          },
-        });
+            include: {
+              lote: true,
+            },
+          });
+        } catch (error) {
+          console.warn(error);
+        }
       }),
     );
 

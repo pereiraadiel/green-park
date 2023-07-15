@@ -8,7 +8,7 @@
 - ### [Typescript](https://typescriptlang.org)
 - ### [Fastify](https://fastify.dev)
 - ### [Prisma ORM](https://prisma.io)
-- ### [SQLite](https://sqlite.org)
+- ### [Postgres](https://postgresql.org)
 - ### [Yarn](https://yarnpkg.com)
 <br/>
 
