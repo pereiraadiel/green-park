@@ -129,7 +129,7 @@ export class GenerateReportService {
 
     document.end();
 
-    return new Promise<Readable>((resolve, reject) => {
+    return new Promise<string>((resolve, reject) => {
       document.on('error', (error) => {
         reject(error);
       });
@@ -137,9 +137,7 @@ export class GenerateReportService {
       document.on('end', () => {
         const buffer = Buffer.concat(memoryStream.queue);
 
-        const readableStream = Readable.from(buffer);
-
-        resolve(readableStream);
+        resolve(buffer.toString('base64'));
       });
     });
   }
