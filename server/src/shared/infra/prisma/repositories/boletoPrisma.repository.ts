@@ -16,6 +16,13 @@ export class BoletoPrismaRepository implements BoletoRepository {
   async createMany(dto: CreateOneBoletoDTO[]): Promise<BoletoEntity[]> {
     const boletos = await Promise.all(
       dto.map(async (item) => {
+        const alreadyExists = await this.prisma.boleto.findUnique({
+          where: {
+            linhaDigitavel: item.linhaDigitavel,
+          },
+        });
+        if (alreadyExists) return alreadyExists;
+
         return await this.prisma.boleto.create({
           data: {
             ativo: item.ativo,
@@ -36,6 +43,7 @@ export class BoletoPrismaRepository implements BoletoRepository {
     );
 
     return boletos.map((boleto) => {
+      console.warn(boleto);
       return {
         ...boleto,
         valor: Number(boleto.valor),

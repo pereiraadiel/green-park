@@ -7,14 +7,12 @@ import {
   UploadedFile,
   UseInterceptors,
 } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
 
 import { GetManyBoletosParamRequest } from './requests/getManyBoletos.request';
 import { GetManyBoletosUseCase } from '../../../../../domain/usecases/getManyBoletos.usecase';
 import { ImportBoletosFromCSVUseCase } from '../../../../../domain/usecases/importBoletosFromCSV.usecase';
 import { FileUploadInterceptor } from '../../interceptors/fileUpload.interceptor';
 import { diskStorage } from 'multer';
-import * as path from 'path';
 import {
   csvFilter,
   generateFilename,
@@ -59,23 +57,21 @@ export class BoletosController {
       fileFilter: csvFilter,
     }),
   )
-  async importCSV(@UploadedFile() csv: Express.Multer.File) {
-    console.warn(csv);
-    return await this.importBoletosFromCSVUseCase.handle(csv.destination);
+  async importCSV(@UploadedFile() _csv) {
+    return await this.importBoletosFromCSVUseCase.handle();
   }
 
   @Post('/import/pdf')
   @UseInterceptors(
     FileUploadInterceptor('file', {
       storage: diskStorage({
-        destination: './src/	uploads',
+        destination: './src/uploads',
         filename: generateFilename,
       }),
       fileFilter: pdfFilter,
     }),
   )
-  async importPDF(@UploadedFile() pdf) {
-    console.warn(pdf);
+  async importPDF(@UploadedFile() _pdf) {
     return await this.importPdfAndAssociateWithBoletosUseCase.handle();
   }
 }

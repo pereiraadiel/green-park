@@ -13,6 +13,8 @@ import { UseCase } from './usecase';
 import { unidadeToIdLoteMapper } from '../mappers/lote.mapper';
 import { inputBoletoJsonToCreateOneBoletoDTOMapper } from '../mappers/boleto.mapper';
 import { InputBoletoJSON } from '../interfaces/inputBoletoJSON.interface';
+import * as path from 'path';
+import * as fs from 'fs';
 
 @Injectable()
 export class ImportBoletosFromCSVUseCase extends UseCase {
@@ -27,8 +29,11 @@ export class ImportBoletosFromCSVUseCase extends UseCase {
     super();
   }
 
-  async handle(csv: string) {
+  async handle() {
     try {
+      const csvPath = path.resolve(__dirname, '..', '..', 'uploads', 'csv.csv');
+      const csv = fs.readFileSync(csvPath).toString('utf8');
+      console.warn(csv, 'csv');
       const boletosJson: InputBoletoJSON[] = await CSVtoJSON(csv);
       const lotes = await this.loteRepository.findMany();
 
