@@ -7,9 +7,8 @@
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",
-    "postbuild": "cp -r src/uploads src/prisma dist/src",
+    "postbuild": "cp -r src/uploads dist/src && cp -r prisma dist",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "prestart": "cp -r src/uploads src/prisma dist/src",
     "start": "node dist/src/main",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",

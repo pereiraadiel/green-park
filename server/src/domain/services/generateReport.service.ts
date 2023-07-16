@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import * as PdfKit from 'pdfkit';
 const MemoryStream = require('memorystream');
-import { Readable } from 'stream';
 
 import { BoletoEntity } from '../entities/boleto';
 

@@ -1,0 +1,47 @@
+version: "3"
+services:
+  postgres:
+    container_name: pg_greenpark
+    image: postgres
+    environment:
+      POSTGRES_USER: green
+      POSTGRES_PASSWORD: acesso
+      POSTGRES_DB: greenpark
+    ports:
+      - 5432:5432
+    volumes:
+      - data:/var/lib/postgresql/data
+    restart: always
+    networks:
+      - green-net
+    healthcheck:
+      test: "pg_isready -U postgres -d cybergenios"
+      interval: 10s
+      timeout: 5s
+      retries: 3
+  app:
+    container_name: server_greenpark
+    build: ./server
+    environment:
+      DATABASE_URL: postgresql://green:acesso@postgres:5432/greenpark
+    # entrypoint: sh -c "yarn db:migrate && yarn db:seed && yarn star:dev"
+    command: npm run start
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    links:
+      - postgres
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: always
+    networks:
+      - green-net
+
+volumes:
+  data: {}
+
+networks:
+  green-net:
+    driver: bridge
